@@ -1,6 +1,0 @@
-{
-  "extends": "@seegull/typescript-config/base.json",
-    "compilerOptions": {
-    "strict": true
-  }
-}
