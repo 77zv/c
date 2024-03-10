@@ -1,18 +1,10 @@
-import Fastify from "fastify";
+import { getUserRoute, server } from '@seegull/wizard';
+import type {Server} from "@seegull/wizard";
 
-const fastify = Fastify({
-  logger: true,
+const router = { getUserRoute(server as Server) };
+
+export type Router = typeof router;
+
+server.listen({ port: 5000, host: '0.0.0.0' }, () => {
+  console.log('server listening');
 });
-
-// Declare a route
-fastify.get("/", async function handler(request, reply) {
-  return { hello: "world" };
-});
-
-// Run the server!
-try {
-  await fastify.listen({ port: 3000 });
-} catch (err) {
-  fastify.log.error(err);
-  process.exit(1);
-}
