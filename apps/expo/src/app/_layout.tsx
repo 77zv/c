@@ -1,7 +1,7 @@
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 
-import { TRPCProvider } from "~/utils/api";
+// import { TRPCProvider } from "~/utils/api"; // todo: setup query client
 
 import "../styles.css";
 
@@ -11,8 +11,10 @@ import { useColorScheme } from "nativewind";
 // It wraps your pages with the providers they need
 export default function RootLayout() {
   const { colorScheme } = useColorScheme();
+
   return (
-    <TRPCProvider>
+    <>
+      {/* <TRPCProvider> */}
       {/*
           The Stack component displays the current page.
           It also allows you to configure your screens 
@@ -28,6 +30,7 @@ export default function RootLayout() {
         }}
       />
       <StatusBar />
-    </TRPCProvider>
+      {/* </TRPCProvider> */}
+    </>
   );
 }

@@ -1,5 +1,5 @@
 {
-  "name": "@acme/expo",
+  "name": "@seegull/expo",
   "version": "0.1.0",
   "private": true,
   "main": "expo-router/entry",
@@ -39,11 +39,10 @@
     "superjson": "2.2.1"
   },
   "devDependencies": {
-    "@acme/api": "workspace:^0.1.0",
-    "@acme/eslint-config": "workspace:^0.2.0",
-    "@acme/prettier-config": "workspace:^0.1.0",
-    "@acme/tailwind-config": "workspace:^0.1.0",
-    "@acme/tsconfig": "workspace:^0.1.0",
+    "@seegull/eslint-config": "workspace:^0.2.0",
+    "@seegull/prettier-config": "workspace:^0.1.0",
+    "@seegull/tailwind-config": "workspace:^0.1.0",
+    "@seegull/tsconfig": "workspace:^0.1.0",
     "@babel/core": "^7.23.9",
     "@babel/preset-env": "^7.23.9",
     "@babel/runtime": "^7.23.9",
@@ -57,12 +56,12 @@
   "eslintConfig": {
     "root": true,
     "extends": [
-      "@acme/eslint-config/base",
-      "@acme/eslint-config/react"
+      "@seegull/eslint-config/base",
+      "@seegull/eslint-config/react"
     ],
     "ignorePatterns": [
       "expo-plugins/**"
     ]
   },
-  "prettier": "@acme/prettier-config"
+  "prettier": "@seegull/prettier-config"
 }
