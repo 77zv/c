@@ -1,10 +1,11 @@
 import fastifyCors from '@fastify/cors';
 import fastify from 'fastify';
 import { getUserRoute } from './routes/getUser.route';
+import type {
+  ZodTypeProvider} from 'fastify-type-provider-zod';
 import {
   serializerCompiler,
-  validatorCompiler,
-  ZodTypeProvider,
+  validatorCompiler
 } from 'fastify-type-provider-zod';
 
 export const server = fastify({
