@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@repo/ui";
+import { Button } from "@seegull/ui";
 
 import styles from "../styles/index.module.css";
 
