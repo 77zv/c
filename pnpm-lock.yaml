@@ -154,6 +154,15 @@ importers:
         specifier: ^4.7.1
         version: 4.7.1
     devDependencies:
+      '@acme/eslint-config':
+        specifier: workspace:*
+        version: link:../../tooling/eslint
+      '@acme/prettier-config':
+        specifier: workspace:*
+        version: link:../../tooling/prettier
+      '@acme/tsconfig':
+        specifier: workspace:*
+        version: link:../../tooling/typescript
       '@types/express':
         specifier: ^4.17.21
         version: 4.17.21
