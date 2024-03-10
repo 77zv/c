@@ -6,6 +6,7 @@
       "~/*": ["./src/*"]
     },
     "jsx": "react-native",
+    "incremental": true,
     "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json",
     "types": ["nativewind/types"]
   },
