@@ -1,11 +1,33 @@
 {
-  "name": "@acme/express",
-  "version": "1.0.0",
+  "name": "express",
+  "version": "0.1.0",
   "private": true,
+  "main": "src/index.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start:dev": "ts-node-dev --respawn src/index.ts"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.3",
+    "nodemon": "^3.1.0",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0"
+  },
+  "eslintConfig": {
+    "root": true,
+    "extends": [
+      "@acme/eslint-config/base"
+    ],
+    "ignorePatterns": [
+      "expo-plugins/**"
+    ]
+  },
+  "prettier": "@acme/prettier-config",
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.11.25"
+  }
 }
