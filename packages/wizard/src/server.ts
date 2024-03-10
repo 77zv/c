@@ -1,6 +1,7 @@
 import fastifyCors from '@fastify/cors';
 import fastify from 'fastify';
 import { getUserRoute } from './routes/getUser.route';
+import { Router } from './routes/router';
 import type {
   ZodTypeProvider} from 'fastify-type-provider-zod';
 import {
@@ -19,3 +20,4 @@ await server.register(fastifyCors, {});
 
 export type Server = typeof server;
 export {getUserRoute};
+export type {Router};
