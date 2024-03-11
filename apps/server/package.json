@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "clean": "git clean -xdf .turbo node_modules",
-    "dev": "pnpm with-env tsx watch src/index.ts",
+    "dev": "tsx watch src/index.ts",
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "lint": "eslint .",
     "start": "node dist/index.js",
