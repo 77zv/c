@@ -15,11 +15,12 @@
   "dependencies": {
     "@seegull/db": "workspace:^0.1.0",
     "@seegull/wizard": "workspace:^0.1.0",
+<<<<<<< HEAD
     "@t3-oss/env-core": "^0.9.2",
     "concurrently": "^8.2.2",
+=======
+>>>>>>> fcfc007a2f4021adfd850e123da97557b2ceaf01
     "fastify": "^4.26.2",
-    "nodemon": "^3.1.0",
-    "ts-node-dev": "^2.0.0",
     "zod": "^3.22.4"
   },
   "devDependencies": {
