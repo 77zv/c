@@ -4,7 +4,6 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "tsc",
     "clean": "git clean -xdf .turbo node_modules",
     "dev": "tsx watch src/index.ts",
     "format": "prettier --check . --ignore-path ../../.gitignore",
