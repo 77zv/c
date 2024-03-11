@@ -1,13 +1,13 @@
-import fastifyCors from '@fastify/cors';
-import fastify from 'fastify';
-import { getUserRoute } from './routes/getUser.route';
-import { Router } from './routes/router';
-import type {
-  ZodTypeProvider} from 'fastify-type-provider-zod';
+import type { ZodTypeProvider } from "fastify-type-provider-zod";
+import fastifyCors from "@fastify/cors";
+import fastify from "fastify";
 import {
   serializerCompiler,
-  validatorCompiler
-} from 'fastify-type-provider-zod';
+  validatorCompiler,
+} from "fastify-type-provider-zod";
+
+import type { Router } from "./routes/router";
+import { getUserRoute } from "./routes/getUser.route";
 
 export const server = fastify({
   logger: true,
@@ -19,5 +19,5 @@ server.setSerializerCompiler(serializerCompiler);
 await server.register(fastifyCors, {});
 
 export type Server = typeof server;
-export {getUserRoute};
-export type {Router};
+export { getUserRoute };
+export type { Router };

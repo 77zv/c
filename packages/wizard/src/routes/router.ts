@@ -1,7 +1,7 @@
-import { getUserRoute, server } from '@seegull/wizard';
+import { getUserRoute, server } from "@seegull/wizard";
 
 const router = {
-    ...getUserRoute(server)
+  ...getUserRoute(server),
 };
 
 export type Router = typeof router;
