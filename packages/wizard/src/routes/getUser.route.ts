@@ -1,11 +1,11 @@
-import { createRoute } from '@http-wizard/core';
-import { z } from 'zod';
+import { createRoute } from "@http-wizard/core";
+import { z } from "zod";
 
-import { Server } from '../server';
+import { Server } from "../server";
 
 export const getUserRoute = (server: Server) => {
-  return createRoute('/user', {
-    method: 'GET',
+  return createRoute("/user", {
+    method: "GET",
     schema: {
       response: {
         200: z.object({
@@ -18,7 +18,7 @@ export const getUserRoute = (server: Server) => {
     server.route({
       ...props,
       handler: async (_, response) => {
-        await response.code(200).send({ name: 'John', age: 30 });
+        await response.code(200).send({ name: "John", age: 30 });
       },
     });
   });
