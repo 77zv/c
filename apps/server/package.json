@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc",
     "clean": "git clean -xdf .turbo node_modules",
-    "dev": "pnpm build && concurrently \"pnpm build --watch\" \"pnpm watch\"",
+    "dev": "tsx src/index.ts",
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "lint": "eslint .",
     "start": "node dist/index.js",
