@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "903192435204",
+    "project_id": "seegull-4fdb5",
+    "storage_bucket": "seegull-4fdb5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:903192435204:android:e924a18303cc71aad4f351",
+        "android_client_info": {
+          "package_name": "tech.seegull.see"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBTUU7QQUyI3d4bQKiRggU35j80IaoJEQA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
