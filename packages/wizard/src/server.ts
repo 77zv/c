@@ -6,9 +6,6 @@ import {
   validatorCompiler,
 } from "fastify-type-provider-zod";
 
-import type { Router } from "./routes/router";
-import { getUserRoute } from "./routes/getUser.route";
-
 export const server = fastify({
   logger: true,
 }).withTypeProvider<ZodTypeProvider>();
@@ -16,8 +13,11 @@ export const server = fastify({
 server.setValidatorCompiler(validatorCompiler);
 server.setSerializerCompiler(serializerCompiler);
 
-await server.register(fastifyCors, {});
+await server.register(fastifyCors, {
+  origin: "*",
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true,
+});
 
 export type Server = typeof server;
-export { getUserRoute };
-export type { Router };

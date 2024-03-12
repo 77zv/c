@@ -1,12 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
-import {
-  Image,
-  StyleSheet,
-  Text,
-  TouchableHighlight,
-  View,
-} from "react-native";
-import Voice, {
+import type {
   SpeechEndEvent,
   SpeechErrorEvent,
   SpeechRecognizedEvent,
@@ -14,6 +6,14 @@ import Voice, {
   SpeechStartEvent,
   SpeechVolumeChangeEvent,
 } from "@react-native-voice/voice";
+import React, { useCallback, useEffect, useState } from "react";
+import {
+  StyleSheet,
+  Text,
+  TouchableHighlight,
+  View,
+} from "react-native";
+import Voice from "@react-native-voice/voice";
 
 interface State {
   recognized: boolean;
