@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { Redirect, SplashScreen } from "expo-router";
 
+import { api } from "~/api";
 import { LoadingIndicatorOverlay } from "~/components";
 import { usePermissions } from "~/contexts/PermissionsContext";
 import { useSession } from "~/contexts/SessionsContext";
@@ -20,11 +21,7 @@ const Index = () => {
     return <LoadingIndicatorOverlay />;
   }
 
-  return isSignedIn ? (
-    <Redirect href="/(app)" />
-  ) : (
-    <Redirect href="/(auth)" />
-  );
+  return isSignedIn ? <Redirect href="/(app)" /> : <Redirect href="/(auth)" />;
 };
 
 export default Index;

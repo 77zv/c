@@ -1,6 +1,6 @@
-import { getUserRoute } from "./routes/getUser.route";
 import { server } from "./server";
+import { getUserByIdRoute } from "./usecases/getUserById/getUserById.route";
 
-const router = { ...getUserRoute(server) };
+const router = { ...getUserByIdRoute(server) };
 
 export type Router = typeof router;
