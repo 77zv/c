@@ -7,13 +7,10 @@ import type {
   SpeechVolumeChangeEvent,
 } from "@react-native-voice/voice";
 import React, { useCallback, useEffect, useState } from "react";
-import {
-  StyleSheet,
-  Text,
-  TouchableHighlight,
-  View,
-} from "react-native";
+import { StyleSheet, Text, TouchableHighlight, View } from "react-native";
 import Voice from "@react-native-voice/voice";
+
+import { api } from "~/api";
 
 interface State {
   recognized: boolean;
@@ -26,6 +23,8 @@ interface State {
 }
 
 const VoiceTest = () => {
+  const mutation = api.ref("[POST]/user/:id").useMutation();
+
   const [state, setState] = useState<State>({
     recognized: false,
     pitch: 0,

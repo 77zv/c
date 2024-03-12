@@ -1,5 +1,5 @@
 import { server } from "./server";
-import { getUserByIdRoute } from "./usecases/getUserById/getUserById.route";
+import { getUserByIdRoute } from "./usecases/get-user-by-id/get-user-by-id.route";
 
 const router = { ...getUserByIdRoute(server) };
 
