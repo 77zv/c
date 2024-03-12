@@ -1,5 +1,5 @@
 export class AiModelsRepository {
-  promptLlm(text: string): string {
+  promptLlm(_text: string): string {
     return "update with llm stuff ltr";
   }
 

@@ -1,8 +1,6 @@
 import { z } from "zod";
 
-import { User } from "../../models/user/user.model";
 import { AiModelsRepository } from "../../repositories/ai-models.repository";
-import { UserRepository } from "../../repositories/user.repository";
 
 export class PromptAiModelUseCase {
   private aiModelRepository: AiModelsRepository;

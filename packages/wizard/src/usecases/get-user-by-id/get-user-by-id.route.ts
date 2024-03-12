@@ -3,7 +3,6 @@ import { z } from "zod";
 
 import type { Server } from "../../server";
 import { User } from "../../models/user/user.model";
-// import { setupGetUserByIdUseCase } from "./getUserById.usecase";
 import { setupGetUserByIdUseCase } from "./get-user-by-id.usecase";
 
 export const getUserByIdRoute = (server: Server) => {
