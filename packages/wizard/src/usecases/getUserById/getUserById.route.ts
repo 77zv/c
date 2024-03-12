@@ -29,7 +29,7 @@ export const getUserByIdRoute = (server: Server) => {
       ...props,
       handler: async (req, res) => {
         try {
-          const user = await getUserByIdUseCase.execute(req.body.id);
+          const user = getUserByIdUseCase.execute(req.body.id);
           return res.status(200).send(user);
         } catch (_) {
           await res.status(404).send({ message: "User not found" });
