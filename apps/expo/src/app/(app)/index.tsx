@@ -23,8 +23,6 @@ interface State {
 }
 
 const VoiceTest = () => {
-  const mutation = api.ref("[POST]/user/:id").useMutation();
-
   const [state, setState] = useState<State>({
     recognized: false,
     pitch: 0,
