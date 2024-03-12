@@ -1,4 +1,3 @@
-// src/usecases/getUserById/getUserById.route.ts
 import { createRoute } from "@http-wizard/core";
 import { z } from "zod";
 

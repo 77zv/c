@@ -12,5 +12,5 @@ export class UserRepository {
     return user;
   }
 
-  // Other repository methods, createUser, updateUser, etc.
+  // Other repository methods
 }

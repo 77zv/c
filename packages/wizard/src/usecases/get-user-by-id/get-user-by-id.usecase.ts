@@ -1,10 +1,8 @@
-// src/usecases/getUserById/getUserById.usecase.ts
 import { z } from "zod";
 
 import { User } from "../../models/user/user.model";
 import { UserRepository } from "../../repositories/user.repository";
 
-// The use case class
 export class GetUserByIdUseCase {
   private userRepository: UserRepository;
 
