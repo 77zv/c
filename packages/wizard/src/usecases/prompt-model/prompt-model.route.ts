@@ -4,7 +4,7 @@ import { z } from "zod";
 import type { Server } from "../../server";
 import { setupPromptAiModelUseCase } from "./prompt-model.usecase";
 
-export const promptModel = (server: Server) => {
+export const promptModelRoute = (server: Server) => {
   const getAiModelUseCase = setupPromptAiModelUseCase();
 
   return createRoute("/prompt-model", {
@@ -25,6 +25,8 @@ export const promptModel = (server: Server) => {
   }).handle((props) => {
     server.route({
       ...props,
+      // todo: create firebase jwt auth prehandler
+      // preHandler: async (req, res) => {},
       handler: async (req, res) => {
         try {
           const response = getAiModelUseCase.execute(req.body.prompt);
