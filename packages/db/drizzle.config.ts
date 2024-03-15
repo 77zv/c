@@ -1,14 +1,16 @@
 import type { Config } from "drizzle-kit";
 
+import { env } from "@seegull/env";
+
 const uri = [
   "mysql://",
-  process.env.DB_USERNAME,
+  env.DB_USERNAME,
   ":",
-  process.env.DB_PASSWORD,
+  env.DB_PASSWORD,
   "@",
-  process.env.DB_HOST,
+  env.DB_HOST,
   ":3306/",
-  process.env.DB_NAME,
+  env.DB_NAME,
   '?ssl={"rejectUnauthorized":true}',
 ].join("");
 
