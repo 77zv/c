@@ -1,8 +1,5 @@
 import type { FastifyListenOptions } from "fastify";
-import { createRoute } from "@http-wizard/core";
-import { z } from "zod";
 
-import { User } from "./models/user/user.model";
 import { server } from "./server";
 import { createUserRoute } from "./usecases/create-user/create-user.route";
 import { getUserRoute } from "./usecases/get-user-by-id/get-user-by-id.route";
@@ -14,10 +11,9 @@ const router = {
   ...promptModelRoute(server),
 };
 
-export const startServer = (opts: FastifyListenOptions) => {
-  server.listen(opts, () => {
-    console.log(`server listening on ${opts.port}`);
-  });
-};
+export const listen = (
+  opts: FastifyListenOptions,
+  callback: (err: Error | null, address: string) => void,
+): void => server.listen(opts, callback);
 
 export type Router = typeof router;
