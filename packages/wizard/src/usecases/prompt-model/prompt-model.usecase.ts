@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 import type { IUseCase } from "../../interfaces/usecase.interface";
-import { AiModelsRepository } from "../../repositories/ai-models.repository";
+import { AiModelsRepository } from "../../repositories/openai.repository";
 
 export class PromptAiModelUseCase implements IUseCase<string, string> {
   private aiModelRepository: AiModelsRepository;
@@ -11,12 +11,13 @@ export class PromptAiModelUseCase implements IUseCase<string, string> {
   }
 
   execute(prompt: string): string {
-    const promptValidation = z.string().min(1);
-    const validatedPrompt = promptValidation.parse(prompt);
+    const llmResponse = this.aiModelRepository.promptLlm(prompt);
 
-    const response = this.aiModelRepository.promptLlm(validatedPrompt);
+    if (llmResponse === undefined) {
+      throw new Error("No llm response");
+    }
 
-    return response;
+    return llmResponse;
   }
 }
 

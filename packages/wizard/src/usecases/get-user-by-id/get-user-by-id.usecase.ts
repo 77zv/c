@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 import type { IUseCase } from "../../interfaces/usecase.interface";
-import { User } from "../../models/user/user.model";
+import type { User } from "../../models/user/user.model";
 import { UserRepository } from "../../repositories/user.repository";
 
 export class GetUserByIdUseCase implements IUseCase<string, User> {
@@ -12,15 +12,13 @@ export class GetUserByIdUseCase implements IUseCase<string, User> {
   }
 
   execute(id: string) {
-    const idValidation = z.string().min(1);
-    const validatedId = idValidation.parse(id);
+    const user = this.userRepository.findById(id);
 
-    const user = this.userRepository.findById(validatedId);
-    if (!user) {
+    if (user === undefined) {
       throw new Error("User not found");
     }
 
-    return User.parse(user);
+    return user;
   }
 }
 

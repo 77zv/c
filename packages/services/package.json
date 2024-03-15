@@ -4,8 +4,8 @@
   "version": "0.1.0",
   "type": "module",
   "exports": {
-    "openai": "./src/openai/index.ts",
-    "elevenlabs": "./src/elevenlabs/index.ts"
+    "./openai": "./src/openai/index.ts",
+    "./elevenlabs": "./src/elevenlabs/index.ts"
   },
   "license": "MIT",
   "scripts": {
