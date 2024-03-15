@@ -1,9 +1,10 @@
 import { z } from "zod";
 
+import type { IUseCase } from "../../interfaces/usecase.interface";
 import { User } from "../../models/user/user.model";
 import { UserRepository } from "../../repositories/user.repository";
 
-export class GetUserByIdUseCase {
+export class GetUserByIdUseCase implements IUseCase<string, User> {
   private userRepository: UserRepository;
 
   constructor(userRepository: UserRepository) {

@@ -325,6 +325,9 @@ importers:
       '@http-wizard/core':
         specifier: ^1.3.20
         version: 1.3.20(axios@1.6.7)
+      '@seegull/services':
+        specifier: workspace:^0.1.0
+        version: link:../services
       axios:
         specifier: ^1.6.7
         version: 1.6.7
