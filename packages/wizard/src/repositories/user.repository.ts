@@ -1,4 +1,4 @@
-import type { User } from "../models/user/user.model";
+import type { User } from "../types/user/user.type";
 
 // Mock user data
 const mockUsers: User[] = [

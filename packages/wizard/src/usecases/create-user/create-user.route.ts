@@ -2,7 +2,7 @@ import { createRoute } from "@http-wizard/core";
 import { z } from "zod";
 
 import type { Server } from "../../server";
-import { User } from "../../models/user/user.model";
+import { User } from "../../types/user/user.type";
 
 export const createUserRoute = (server: Server) => {
   return createRoute("/user/create", {
