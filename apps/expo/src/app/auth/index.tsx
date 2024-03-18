@@ -5,7 +5,7 @@ import { useSession } from '~/contexts/SessionsContext';
 import { FirebaseAuthTypes } from '@react-native-firebase/auth';
 import { router } from 'expo-router';
 
-const Start = () => {
+const Index = () => {
   const [confirm, setConfirm] = useState<FirebaseAuthTypes.ConfirmationResult | null>(null);
 
   interface Input {
@@ -37,7 +37,8 @@ const Start = () => {
   const onOtpSubmit = async ({_phoneNumber, _code: code}: Input) => {
     try {
       await confirm?.confirm(code);
-      router.push("/(auth)/permissions");
+      // router.push("/auth/permissions");
+      router.replace("/app/");
     } catch (error) {
       setError('_code', {
         type: 'manual',
@@ -97,4 +98,4 @@ const Start = () => {
   );
 };
 
-export default Start;
+export default Index;

@@ -1,9 +1,11 @@
 import { Alert, Linking, StyleSheet, View, Text } from "react-native";
+import Checkbox from "@react-native-community/checkbox";
+
 import * as Camera from "expo-camera";
 import * as Contacts from "expo-contacts";
 import { PermissionStatus } from "expo-modules-core";
 import * as Notifications from "expo-notifications";
-import { useRouter } from "expo-router";
+import { Redirect, useRouter } from "expo-router";
 
 import { useSession } from "~/contexts/SessionsContext";
 import { usePermissions } from "../../contexts/PermissionsContext";
@@ -54,14 +56,14 @@ const Permissions = () => {
   };
 
   const onPress = () => {
-    isSignedIn ? router.push("/(app)/") : router.push("/(auth)/signup");
+    isSignedIn ? router.push("/app/") : router.push("/auth/signup");
   };
 
   const requiredPermissions = permissions.camera && permissions.contacts;
 
   return (
     <View>
-      <View>
+      {/* <View>
         <Text>Permissions</Text>
         <Text>
           This app requires certain permissions to function properly. Please
@@ -110,27 +112,9 @@ const Permissions = () => {
 
       <Button onPress={onPress} disabled={!requiredPermissions}>
         <Text>Continue</Text>
-      </Button>
+      </Button> */}
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  title: {
-    fontSize: 22,
-    fontWeight: "bold",
-    marginBottom: 20,
-  },
-  description: {
-    fontSize: 16,
-    marginBottom: 20,
-  },
-  permissionItem: {
-    marginVertical: 10,
-    alignItems: "center",
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-});
 
 export default Permissions;
