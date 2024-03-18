@@ -1,20 +1,38 @@
+import { ChatCompletionChunk } from "openai/resources/index.mjs";
+import { Stream } from "openai/streaming.mjs";
 import { z } from "zod";
 
 import type { IUseCase } from "../../interfaces/usecase.interface";
-import { AiModelsRepository } from "../../repositories/openai.repository";
+import { OpenAiRepository } from "../../repositories/openai.repository";
+import { PromptModel } from "../../types/user/openai.types";
 
-export class PromptAiModelUseCase implements IUseCase<string, string> {
-  private aiModelRepository: AiModelsRepository;
+export class PromptAiModelUseCase
+  implements IUseCase<PromptModel, Stream<ChatCompletionChunk>>
+{
+  private aiModelRepository: OpenAiRepository;
 
-  constructor(aiModelRepository: AiModelsRepository) {
+  constructor(aiModelRepository: OpenAiRepository) {
     this.aiModelRepository = aiModelRepository;
   }
 
-  execute(prompt: string): string {
-    const llmResponse = this.aiModelRepository.promptLlm(prompt);
+  async execute(input: PromptModel): Promise<Stream<ChatCompletionChunk>> {
+    let llmResponse: Stream<ChatCompletionChunk> | undefined;
 
-    if (llmResponse === undefined) {
-      throw new Error("No llm response");
+    try {
+      if (this.aiModelRepository.isPromptText(input)) {
+        llmResponse = await this.aiModelRepository.promptLlmText(input);
+      } else if (this.aiModelRepository.isPromptImages(input)) {
+        llmResponse = await this.aiModelRepository.promptLlmImages(input);
+      } else if (this.aiModelRepository.isPromptTextAndImages(input)) {
+        llmResponse =
+          await this.aiModelRepository.promptLlmTextAndImages(input);
+      }
+
+      if (llmResponse === undefined) {
+        throw new Error("Error with llm response");
+      }
+    } catch (error) {
+      throw new Error("Error with llm response");
     }
 
     return llmResponse;
@@ -22,6 +40,6 @@ export class PromptAiModelUseCase implements IUseCase<string, string> {
 }
 
 export const setupPromptAiModelUseCase = () => {
-  const aiModelRepository = new AiModelsRepository();
+  const aiModelRepository = new OpenAiRepository();
   return new PromptAiModelUseCase(aiModelRepository);
 };
