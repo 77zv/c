@@ -2,6 +2,7 @@ import { createRoute } from "@http-wizard/core";
 import { z } from "zod";
 
 import type { Server } from "../../server";
+import { PromptModelSchema } from "../../types/user/openai.types";
 import { setupPromptAiModelUseCase } from "./prompt-model.usecase";
 
 export const promptModelRoute = (server: Server) => {
@@ -10,9 +11,7 @@ export const promptModelRoute = (server: Server) => {
   return createRoute("/prompt-model", {
     method: "POST",
     schema: {
-      body: z.object({
-        prompt: z.string().min(1),
-      }),
+      body: PromptModelSchema,
       response: {
         200: z.object({
           response: z.string(),
@@ -29,8 +28,15 @@ export const promptModelRoute = (server: Server) => {
       // preHandler: async (req, res) => {},
       handler: async (req, res) => {
         try {
-          const response = getAiModelUseCase.execute(req.body.prompt);
-          return res.status(200).send({ response });
+          const response = await getAiModelUseCase.execute(req.body);
+
+          for await (const chunk of response) {
+            const content = chunk.choices[0]?.delta.content;
+
+            console.log(content);
+          }
+
+          return res.status(200).send({ response: "Prompt created" });
         } catch (_) {
           await res.status(404).send({ message: "Prompt not found" });
         }

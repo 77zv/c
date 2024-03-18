@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 import type { IUseCase } from "../../interfaces/usecase.interface";
-import type { User } from "../../types/user/user.type";
+import type { User } from "../../types/user/user.types";
 import { UserRepository } from "../../repositories/user.repository";
 
 export class GetUserByIdUseCase implements IUseCase<string, User> {

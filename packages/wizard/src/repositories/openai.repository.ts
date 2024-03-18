@@ -12,7 +12,7 @@ import type {
   PromptModel,
   PromptText,
   PromptTextAndImages,
-} from "../types/user/openai.type";
+} from "../types/user/openai.types";
 
 export class OpenAiRepository {
   async promptLlmText(input: PromptText): Promise<Stream<ChatCompletionChunk>> {
