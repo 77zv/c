@@ -3,7 +3,7 @@ import { z } from "zod";
 
 import type { Server } from "../../server";
 import { PromptModelSchema } from "../../types/user/openai.types";
-import { setupPromptAiModelUseCase } from "./prompt-model.usecase";
+import { setupPromptAiModelUseCase } from "./prompt-ai-model.usecase";
 
 export const promptModelRoute = (server: Server) => {
   const getAiModelUseCase = setupPromptAiModelUseCase();
@@ -30,11 +30,6 @@ export const promptModelRoute = (server: Server) => {
         try {
           const response = await getAiModelUseCase.execute(req.body);
 
-          for await (const chunk of response) {
-            const content = chunk.choices[0]?.delta.content;
-
-            console.log(content);
-          }
 
           return res.status(200).send({ response: "Prompt created" });
         } catch (_) {

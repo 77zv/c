@@ -15,7 +15,40 @@ import type {
 } from "../types/user/openai.types";
 
 export class OpenAiRepository {
-  async promptLlmText(input: PromptText): Promise<Stream<ChatCompletionChunk>> {
+  isPromptText = (prompt: PromptModel): prompt is PromptText => {
+    return "text" in prompt;
+  };
+
+  isPromptImages = (prompt: PromptModel): prompt is PromptImages => {
+    return "imageUrls" in prompt;
+  };
+
+  isPromptTextAndImages = (
+    prompt: PromptModel,
+  ): prompt is PromptTextAndImages => {
+    return this.isPromptText(prompt) && this.isPromptImages(prompt);
+  };
+
+  async promptLlmText(input: PromptText): Promise<AsyncIterable<string>> {
+    const response = await this.initiateLlmTextPrompt(input);
+    return this.streamTextFromResponse(response);
+  }
+
+  async promptLlmImages(input: PromptImages): Promise<AsyncIterable<string>> {
+    const response = await this.initiateLlmImagesPrompt(input);
+    return this.streamTextFromResponse(response);
+  }
+
+  async promptLlmTextAndImages(
+    input: PromptTextAndImages,
+  ): Promise<AsyncIterable<string>> {
+    const response = await this.initiateLlmTextAndImagesPrompt(input);
+    return this.streamTextFromResponse(response);
+  }
+
+  private async initiateLlmTextPrompt(
+    input: PromptText,
+  ): Promise<Stream<ChatCompletionChunk>> {
     const { text } = input;
 
     const response = await openai.chat.completions.create({
@@ -33,7 +66,7 @@ export class OpenAiRepository {
     return response;
   }
 
-  async promptLlmImages(
+  private async initiateLlmImagesPrompt(
     input: PromptImages,
   ): Promise<Stream<ChatCompletionChunk>> {
     const { imageUrls } = input;
@@ -60,7 +93,7 @@ export class OpenAiRepository {
     return response;
   }
 
-  async promptLlmTextAndImages(
+  private async initiateLlmTextAndImagesPrompt(
     input: PromptTextAndImages,
   ): Promise<Stream<ChatCompletionChunk>> {
     const { text, imageUrls } = input;
@@ -92,17 +125,14 @@ export class OpenAiRepository {
     return response;
   }
 
-  isPromptText = (prompt: PromptModel): prompt is PromptText => {
-    return "text" in prompt;
-  };
-
-  isPromptImages = (prompt: PromptModel): prompt is PromptImages => {
-    return "imageUrls" in prompt;
-  };
-
-  isPromptTextAndImages = (
-    prompt: PromptModel,
-  ): prompt is PromptTextAndImages => {
-    return this.isPromptText(prompt) && this.isPromptImages(prompt);
-  };
+  private async *streamTextFromResponse(
+    response: Stream<ChatCompletionChunk>,
+  ): AsyncIterable<string> {
+    for await (const chunk of response) {
+      const content = chunk.choices[0]?.delta?.content;
+      if (content) {
+        yield content;
+      }
+    }
+  }
 }

@@ -10,7 +10,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { StyleSheet, Text, TouchableHighlight, View } from "react-native";
 import Voice from "@react-native-voice/voice";
 
-import { api } from "~/api";
+// todo: https://tkdodo.eu/blog/using-web-sockets-with-react-query
 
 interface State {
   recognized: boolean;
