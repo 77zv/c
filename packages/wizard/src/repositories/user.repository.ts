@@ -11,6 +11,4 @@ export class UserRepository {
     const user = mockUsers.find((user) => user.id === id);
     return user;
   }
-
-  // Other repository methods
 }
