@@ -10,8 +10,6 @@ import React, { useCallback, useEffect, useState } from "react";
 import { StyleSheet, Text, TouchableHighlight, View } from "react-native";
 import Voice from "@react-native-voice/voice";
 
-import { api } from "~/api";
-
 interface State {
   recognized: boolean;
   pitch: number;
@@ -127,25 +125,25 @@ const VoiceTest = () => {
       console.error(e);
     }
   };
-
+  
   return (
     <View style={styles.container}>
       <Text style={styles.welcome}>Welcome to React Native Voice!</Text>
       <Text style={styles.instructions}>
         Press and hold the button, then speak.
       </Text>
-      <TouchableHighlight
+      {/* <TouchableHighlight
         onPressIn={startRecognizing}
         onPressOut={stopRecognizing}
         style={styles.button}
         underlayColor="#DDDDDD"
-      ></TouchableHighlight>
+      ></TouchableHighlight> */}
       {/* Display transcription results */}
-      {state.results.map((result, index) => (
+      {/* {state.results.map((result, index) => (
         <Text key={`result-${index}`} style={styles.stat}>
           {result}
         </Text>
-      ))}
+      ))} */}
     </View>
   );
 };

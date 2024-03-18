@@ -38,7 +38,8 @@ interface SessionProviderProps {
 const AuthContext = createContext<SessionContextType | undefined>(undefined);
 
 const SessionProvider = ({ children }: SessionProviderProps) => {
-  const _router = useRouter();
+
+  const router = useRouter();
 
 //   const deleteUser = api.auth.deleteUser.useMutation();
 
@@ -54,6 +55,11 @@ const SessionProvider = ({ children }: SessionProviderProps) => {
       console.log("Auth state changed:", authUser);
       setUser(authUser);
       setIsLoading(false);
+      
+      // Redirect on Sign out
+      if (!authUser){
+        router.replace("/auth/");
+      }
     });
 
     return unsubscribe;
