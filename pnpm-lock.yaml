@@ -1,5 +1,9 @@
 lockfileVersion: '6.0'
 
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
 importers:
 
   .:
@@ -316,6 +320,27 @@ importers:
         specifier: ^5.3.3
         version: 5.3.3
 
+  packages/utils:
+    devDependencies:
+      '@seegull/eslint-config':
+        specifier: workspace:^0.2.0
+        version: link:../../tooling/eslint
+      '@seegull/prettier-config':
+        specifier: workspace:^0.1.0
+        version: link:../../tooling/prettier
+      '@seegull/tsconfig':
+        specifier: workspace:^0.1.0
+        version: link:../../tooling/typescript
+      eslint:
+        specifier: ^8.57.0
+        version: 8.57.0
+      prettier:
+        specifier: ^3.2.5
+        version: 3.2.5
+      typescript:
+        specifier: ^5.3.3
+        version: 5.3.3
+
   packages/wizard:
     dependencies:
       '@fastify/cors':
@@ -361,6 +386,9 @@ importers:
       '@seegull/tsconfig':
         specifier: workspace:^0.1.0
         version: link:../../tooling/typescript
+      '@seegull/utils':
+        specifier: workspace:^0.1.0
+        version: link:../utils
       '@types/ws':
         specifier: ^8.5.10
         version: 8.5.10
@@ -12600,7 +12628,3 @@ packages:
 
   /zod@3.22.4:
     resolution: {integrity: sha512-iC+8Io04lddc+mVqQ9AZ7OQ2MrUKGN+oIQyq1vemgt46jwCwLfhq7/pwnBnNXXXZb8VTVLKwp9EDkx+ryxIWmg==}
-
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
