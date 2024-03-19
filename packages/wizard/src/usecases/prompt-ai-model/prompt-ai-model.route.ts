@@ -8,10 +8,13 @@ import { setupPromptAiModelUseCase } from "./prompt-ai-model.usecase";
 export const promptModelRoute = (server: Server) => {
   const getAiModelUseCase = setupPromptAiModelUseCase();
 
-  return createRoute("/prompt-model", {
+  return createRoute("/prompt-ai-model", {
     method: "POST",
     schema: {
-      body: PromptModelSchema,
+      body: z.object({
+        promptData: PromptModelSchema,
+        clientId: z.string().uuid(),
+      }),
       response: {
         404: z.object({
           message: z.string(),

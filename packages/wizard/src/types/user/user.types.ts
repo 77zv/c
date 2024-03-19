@@ -1,11 +1,11 @@
 import { z } from "zod";
 
-export interface User {
-  id: string;
-  name: string;
-}
-
-export const User = z.object({
+const UserSchema = z.object({
   id: z.string(),
   name: z.string(),
 });
+
+type User = z.infer<typeof UserSchema>;
+
+export { UserSchema };
+export type { User };

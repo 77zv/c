@@ -5,11 +5,18 @@ import { z } from "zod";
 import { env } from "@seegull/env";
 
 import type { Server } from "../../server";
+import { websocketClients } from "../../server";
+import { AudioData, AudioDataSchema } from "../../types/user/elevenlabs.types";
 
 export const listenToPromptResponseRoute = (server: Server) => {
-  return createRoute("/test", {
-    method: "GET",
+  // dynamic route with :id
+  return createRoute("/listen-to-prompt-response/:client-id", {
+    method: "POST",
     schema: {
+      body: z.union([AudioDataSchema, z.undefined()]),
+      params: z.object({
+        "client-id": z.string().uuid(),
+      }),
       response: {
         200: z.object({
           message: z.string(),
@@ -22,18 +29,28 @@ export const listenToPromptResponseRoute = (server: Server) => {
   }).handle((props) => {
     server.route({
       ...props,
-      handler: async (req, reply) => {
-        await reply
+      handler: async (_req, res) => {
+        await res
           .status(404)
           .send({ message: "HTTPS not supported. Please use WSS." });
       },
-      wsHandler: (connection) => {
+      wsHandler: (connection, req) => {
+        const clientId = req.params["client-id"];
+        websocketClients.set(clientId, connection);
+
         connection.socket.onmessage = (event: MessageEvent<string>) => {
-          const uri = `wss://api.elevenlabs.io/v1/text-to-speech/${env.ELEVEN_LABS_VOICE_ID}/stream-input?model_id=eleven_monolingual_v1`;
+          if (AudioDataSchema.safeParse(JSON.parse(event.data)).success) {
+            server.log.info(
+              `WS message from client => ${clientId}: ${event.data}`,
+            );
+          }
+          server.log.info(
+            `WS message from server => ${clientId}: ${event.data}`,
+          );
         };
 
         connection.socket.onopen = () => {
-          connection.socket.send("__on open__");
+          websocketClients.delete(clientId);
         };
       },
     });

@@ -1,10 +1,22 @@
 import WebSocket from "ws";
 
-import type { AudioData } from "@seegull/services/elevenlabs";
 import { env } from "@seegull/env";
-import { isAudioData, wsUrl } from "@seegull/services/elevenlabs";
+import { wsUrl } from "@seegull/services/elevenlabs";
+
+import type { AudioData } from "../types/user/elevenlabs.types";
 
 export class ElevenLabsRepository {
+  isAudioData(data: unknown): data is AudioData {
+    return (
+      typeof data === "object" &&
+      data !== null &&
+      "audio" in data &&
+      "isFinal" in data &&
+      "normalizedAlignment" in data &&
+      "alignment" in data
+    );
+  }
+
   textToSpeech(
     textIterator: AsyncIterable<string>,
     audioData?: (data: AudioData) => void,
@@ -34,7 +46,7 @@ export class ElevenLabsRepository {
     });
 
     websocket.on("message", (data) => {
-      if (isAudioData(data)) {
+      if (this.isAudioData(data)) {
         audioData && audioData(data);
       }
     });

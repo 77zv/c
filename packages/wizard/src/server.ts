@@ -1,3 +1,4 @@
+import type { SocketStream } from "@fastify/websocket";
 import type { ZodTypeProvider } from "fastify-type-provider-zod";
 import fastifyCors from "@fastify/cors";
 import swagger from "@fastify/swagger";
@@ -33,10 +34,10 @@ await server.register(swaggerUi, {
     deepLinking: false,
   },
   uiHooks: {
-    onRequest: function (_request, _reply, next) {
+    onRequest(_request, _reply, next) {
       next();
     },
-    preHandler: function (_request, _reply, next) {
+    preHandler(_request, _reply, next) {
       next();
     },
   },
@@ -47,5 +48,7 @@ await server.register(swaggerUi, {
   },
   transformSpecificationClone: true,
 });
+
+export const websocketClients = new Map<string, SocketStream>();
 
 export type Server = typeof server;

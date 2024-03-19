@@ -1,16 +1,20 @@
-import { WebSocket } from "ws";
-
-import type { AudioData } from "@seegull/services/elevenlabs";
-import { env } from "@seegull/env";
-import { isAudioData, wsUrl } from "@seegull/services/elevenlabs";
 import TextStreamProcessor from "@seegull/utils/text-stream-processor";
 
 import type { IUseCase } from "../../interfaces/usecase.interface";
+import type { AudioData } from "../../types/user/elevenlabs.types";
 import type { PromptModel } from "../../types/user/openai.types";
 import { ElevenLabsRepository } from "../../repositories/elevenlabs.repository";
 import { OpenAiRepository } from "../../repositories/openai.repository";
+import { websocketClients } from "../../server";
 
-export class PromptAiModelUseCase implements IUseCase<PromptModel, void> {
+interface PromptAiModelProps {
+  promptData: PromptModel;
+  clientId: string;
+}
+
+export class PromptAiModelUseCase
+  implements IUseCase<PromptAiModelProps, void>
+{
   private openAiRepository: OpenAiRepository;
   private elevenLabsRepository: ElevenLabsRepository;
 
@@ -22,19 +26,19 @@ export class PromptAiModelUseCase implements IUseCase<PromptModel, void> {
     this.elevenLabsRepository = elevenLabsRepository;
   }
 
-  async execute(input: PromptModel): Promise<void> {
+  async execute({ promptData, clientId }: PromptAiModelProps): Promise<void> {
     let llmTextResponseIterator: AsyncIterable<string> | undefined;
 
     try {
-      if (this.openAiRepository.isPromptText(input)) {
+      if (this.openAiRepository.isPromptText(promptData)) {
         llmTextResponseIterator =
-          await this.openAiRepository.promptLlmText(input);
-      } else if (this.openAiRepository.isPromptImages(input)) {
+          await this.openAiRepository.promptLlmText(promptData);
+      } else if (this.openAiRepository.isPromptImages(promptData)) {
         llmTextResponseIterator =
-          await this.openAiRepository.promptLlmImages(input);
-      } else if (this.openAiRepository.isPromptTextAndImages(input)) {
+          await this.openAiRepository.promptLlmImages(promptData);
+      } else if (this.openAiRepository.isPromptTextAndImages(promptData)) {
         llmTextResponseIterator =
-          await this.openAiRepository.promptLlmTextAndImages(input);
+          await this.openAiRepository.promptLlmTextAndImages(promptData);
       }
 
       if (llmTextResponseIterator === undefined) {
@@ -49,6 +53,12 @@ export class PromptAiModelUseCase implements IUseCase<PromptModel, void> {
     );
 
     this.elevenLabsRepository.textToSpeech(textChunker, (data: AudioData) => {
+      const connection = websocketClients.get(clientId);
+
+      if (connection?.socket.OPEN) {
+        connection.socket.send(JSON.stringify(data));
+      }
+
       console.log(data);
     });
   }
