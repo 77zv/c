@@ -8,17 +8,6 @@ import { server } from "../server";
 import { AudioDataSchema } from "../types/user/elevenlabs.types";
 
 export class ElevenLabsRepository {
-  isAudioData(data: unknown): data is AudioData {
-    return (
-      typeof data === "object" &&
-      data !== null &&
-      "audio" in data &&
-      "isFinal" in data &&
-      "normalizedAlignment" in data &&
-      "alignment" in data
-    );
-  }
-
   textToSpeech(
     textIterator: AsyncIterable<string>,
     audioData?: (data: AudioData) => void,
