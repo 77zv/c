@@ -1,28 +1,27 @@
-// import { ChatCompletionChunk } from "openai/resources/index.mjs";
-// import { Stream } from "openai/streaming.mjs";
-// import { z } from "zod";
+import type { SocketStream } from "@fastify/websocket";
 
-// import type { IUseCase } from "../../interfaces/usecase.interface";
-// import { OpenAiRepository } from "../../repositories/openai.repository";
-// import type { PromptModel } from "../../types/user/openai.types";
+import type { IWebSocketUseCase } from "../../interfaces/usecase.interface";
+import { server, websocketClients } from "../../server";
+import { AudioDataSchema } from "../../types/user/elevenlabs.types";
 
-// export class ListenToPromptResponseUseCase
-//   implements IUseCase<PromptModel, Stream<ChatCompletionChunk>>
-// {
-//   // private aiModelRepository: OpenAiRepository;
+export class ListenToPromptResponseUseCase
+  implements IWebSocketUseCase<string>
+{
+  handleConnection(connection: SocketStream, clientId: string): void {
+    websocketClients.set(clientId, connection);
 
-//   constructor(aiModelRepository: OpenAiRepository) {
-//     // this.aiModelRepository = aiModelRepository;
-//   }
+    connection.socket.onmessage = (event: MessageEvent<string>) => {
+      server.log.info(`WS message from server => ${clientId}: ${event.data}`);
 
-//   async execute(input: PromptModel): Promise<Stream<ChatCompletionChunk>> {
-//     let llmResponse: Stream<ChatCompletionChunk> | undefined;
+      const parsedData = AudioDataSchema.parse(JSON.parse(event.data));
 
-//     return llmResponse;
-//   }
-// }
+      if (parsedData.isFinal) {
+        connection.socket.close();
+      }
+    };
+  }
+}
 
-// export const setupPromptAiModelUseCase = () => {
-//   const aiModelRepository = new OpenAiRepository();
-//   return new ListenToPromptResponseUseCase(aiModelRepository);
-// };
+export const setupListenToPromptResponseUseCase = () => {
+  return new ListenToPromptResponseUseCase();
+};

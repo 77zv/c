@@ -4,6 +4,7 @@ import { env } from "@seegull/env";
 import { wsUrl } from "@seegull/services/elevenlabs";
 
 import type { AudioData } from "../types/user/elevenlabs.types";
+import { server } from "../server";
 import { AudioDataSchema } from "../types/user/elevenlabs.types";
 
 export class ElevenLabsRepository {
@@ -35,6 +36,7 @@ export class ElevenLabsRepository {
         );
 
         for await (const text of textIterator) {
+          server.log.info(`Sending text to ElevenLabs: ${text}`);
           websocket.send(
             JSON.stringify({ text, try_trigger_generation: true }),
           );

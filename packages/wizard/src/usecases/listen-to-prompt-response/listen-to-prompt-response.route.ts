@@ -7,9 +7,11 @@ import { env } from "@seegull/env";
 import type { Server } from "../../server";
 import { websocketClients } from "../../server";
 import { AudioData, AudioDataSchema } from "../../types/user/elevenlabs.types";
+import { setupListenToPromptResponseUseCase } from "./listen-to-prompt-response.usecase";
 
 export const listenToPromptResponseRoute = (server: Server) => {
-  // dynamic route with :id
+  const listenToPromptResponseUseCase = setupListenToPromptResponseUseCase();
+
   return createRoute("/listen-to-prompt-response/:id", {
     method: "GET",
     schema: {
@@ -32,18 +34,7 @@ export const listenToPromptResponseRoute = (server: Server) => {
       },
       wsHandler: (connection, req) => {
         const clientId = req.url?.split("/").pop() ?? "";
-        console.log("clientId", clientId);
-        websocketClients.set(clientId, connection);
-
-        connection.socket.onmessage = (event: MessageEvent<string>) => {
-          server.log.info(
-            `WS message from server => ${clientId}: ${event.data}`,
-          );
-        };
-
-        connection.socket.onclose = () => {
-          websocketClients.delete(clientId);
-        };
+        listenToPromptResponseUseCase.handleConnection(connection, clientId);
       },
     });
   });
