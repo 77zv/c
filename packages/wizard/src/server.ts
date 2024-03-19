@@ -2,6 +2,7 @@ import type { ZodTypeProvider } from "fastify-type-provider-zod";
 import fastifyCors from "@fastify/cors";
 import swagger from "@fastify/swagger";
 import swaggerUi from "@fastify/swagger-ui";
+import websocket from "@fastify/websocket";
 import fastify from "fastify";
 import {
   serializerCompiler,
@@ -15,6 +16,8 @@ export const server = fastify({
 server.setValidatorCompiler(validatorCompiler);
 server.setSerializerCompiler(serializerCompiler);
 
+await server.register(websocket);
+
 await server.register(fastifyCors, {
   origin: "*",
   methods: ["GET", "POST", "PUT", "DELETE"],
@@ -23,7 +26,6 @@ await server.register(fastifyCors, {
 });
 
 await server.register(swagger);
-
 await server.register(swaggerUi, {
   routePrefix: "/documentation",
   uiConfig: {

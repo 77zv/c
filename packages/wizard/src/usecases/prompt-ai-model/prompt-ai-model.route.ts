@@ -3,7 +3,7 @@ import { z } from "zod";
 
 import type { Server } from "../../server";
 import { PromptModelSchema } from "../../types/user/openai.types";
-import { setupPromptAiModelUseCase } from "./prompt-model.usecase";
+import { setupPromptAiModelUseCase } from "./prompt-ai-model.usecase";
 
 export const promptModelRoute = (server: Server) => {
   const getAiModelUseCase = setupPromptAiModelUseCase();
@@ -13,9 +13,6 @@ export const promptModelRoute = (server: Server) => {
     schema: {
       body: PromptModelSchema,
       response: {
-        200: z.object({
-          response: z.string(),
-        }),
         404: z.object({
           message: z.string(),
         }),
@@ -28,17 +25,11 @@ export const promptModelRoute = (server: Server) => {
       // preHandler: async (req, res) => {},
       handler: async (req, res) => {
         try {
-          const response = await getAiModelUseCase.execute(req.body);
-
-          for await (const chunk of response) {
-            const content = chunk.choices[0]?.delta.content;
-
-            console.log(content);
-          }
-
-          return res.status(200).send({ response: "Prompt created" });
-        } catch (_) {
-          await res.status(404).send({ message: "Prompt not found" });
+          await getAiModelUseCase.execute(req.body);
+          return res.status(200);
+        } catch (err) {
+          console.error(err);
+          await res.status(404).send({ message: "Something went wrong." });
         }
       },
     });

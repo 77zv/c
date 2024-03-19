@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Redirect, SplashScreen } from "expo-router";
+import { useQueryClient } from "@tanstack/react-query";
 
-import { api } from "~/api";
 import { LoadingIndicatorOverlay } from "~/components";
 import { usePermissions } from "~/contexts/PermissionsContext";
 import { useSession } from "~/contexts/SessionsContext";
