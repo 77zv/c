@@ -29,7 +29,7 @@ export const promptModelRoute = (server: Server) => {
       handler: async (req, res) => {
         try {
           await getAiModelUseCase.execute(req.body);
-          return res.status(200);
+          return res.status(200).send({ message: "Prompted AI model" });
         } catch (err) {
           console.error(err);
           await res.status(404).send({ message: "Something went wrong." });

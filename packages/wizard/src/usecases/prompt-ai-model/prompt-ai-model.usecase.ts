@@ -5,7 +5,7 @@ import type { AudioData } from "../../types/user/elevenlabs.types";
 import type { PromptModel } from "../../types/user/openai.types";
 import { ElevenLabsRepository } from "../../repositories/elevenlabs.repository";
 import { OpenAiRepository } from "../../repositories/openai.repository";
-import { websocketClients } from "../../server";
+import { server, websocketClients } from "../../server";
 
 interface PromptAiModelProps {
   promptData: PromptModel;
@@ -52,14 +52,12 @@ export class PromptAiModelUseCase
       llmTextResponseIterator,
     );
 
-    this.elevenLabsRepository.textToSpeech(textChunker, (data: AudioData) => {
-      const connection = websocketClients.get(clientId);
+    const connection = websocketClients.get(clientId);
 
+    this.elevenLabsRepository.textToSpeech(textChunker, (data: AudioData) => {
       if (connection?.socket.OPEN) {
         connection.socket.send(JSON.stringify(data));
       }
-
-      console.log(data);
     });
   }
 }

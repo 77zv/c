@@ -4,6 +4,7 @@ import { env } from "@seegull/env";
 import { wsUrl } from "@seegull/services/elevenlabs";
 
 import type { AudioData } from "../types/user/elevenlabs.types";
+import { AudioDataSchema } from "../types/user/elevenlabs.types";
 
 export class ElevenLabsRepository {
   isAudioData(data: unknown): data is AudioData {
@@ -46,9 +47,16 @@ export class ElevenLabsRepository {
     });
 
     websocket.on("message", (data) => {
-      if (this.isAudioData(data)) {
-        audioData && audioData(data);
-      }
+      const parsedData = AudioDataSchema.parse(
+        // eslint-disable-next-line @typescript-eslint/no-base-to-string
+        JSON.parse(data.toString()),
+      );
+
+      audioData && audioData(parsedData);
+    });
+
+    websocket.on("close", () => {
+      websocket.terminate();
     });
   }
 }

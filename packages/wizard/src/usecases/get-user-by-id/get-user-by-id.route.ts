@@ -2,7 +2,7 @@ import { createRoute } from "@http-wizard/core";
 import { z } from "zod";
 
 import type { Server } from "../../server";
-import { User } from "../../types/user/user.types";
+import { User, UserSchema } from "../../types/user/user.types";
 import { setupGetUserByIdUseCase } from "./get-user-by-id.usecase";
 
 export const getUserRoute = (server: Server) => {
@@ -12,7 +12,7 @@ export const getUserRoute = (server: Server) => {
     method: "GET",
     schema: {
       response: {
-        200: User,
+        200: UserSchema,
         404: z.object({
           message: z.string(),
         }),

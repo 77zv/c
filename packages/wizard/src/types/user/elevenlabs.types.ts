@@ -1,16 +1,16 @@
 import { z } from "zod";
 
 const AlignmentSchema = z.object({
-  char_start_times_ms: z.array(z.number()),
-  chars_durations_ms: z.array(z.number()),
-  chars: z.array(z.string()),
+  char_start_times_ms: z.array(z.number()).optional(),
+  chars_durations_ms: z.array(z.number()).optional(),
+  chars: z.array(z.string()).optional(),
 });
 
 const AudioDataSchema = z.object({
-  audio: z.string(),
-  isFinal: z.boolean(),
-  normalizedAlignment: AlignmentSchema,
-  alignment: AlignmentSchema,
+  audio: z.string().nullable(),
+  isFinal: z.boolean().nullable(),
+  normalizedAlignment: AlignmentSchema.optional().nullable(),
+  alignment: AlignmentSchema.optional().nullable(),
 });
 
 type Alignment = z.infer<typeof AlignmentSchema>;
