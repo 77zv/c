@@ -1,101 +1,122 @@
-import React, { useState } from 'react';
-import { Button, KeyboardAvoidingView, Platform, View, TextInput, Text } from 'react-native';
-import { useForm, Controller } from 'react-hook-form';
-import { useSession } from '~/contexts/SessionsContext';
-import { FirebaseAuthTypes } from '@react-native-firebase/auth';
-import { router } from 'expo-router';
+import { useRouter } from "expo-router";
+import React from "react";
+import {
+  Dimensions,
+  // Image,
+  // ImageBackground,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
-const Index = () => {
-  const [confirm, setConfirm] = useState<FirebaseAuthTypes.ConfirmationResult | null>(null);
+const screenWidth = Dimensions.get("window").width;
 
-  interface Input {
-    _phoneNumber: string,  
-    _code: string
-  }
+const BeMyEyesScreen = () => {
 
-  const { control, handleSubmit, setError, formState: { errors } } = useForm({
-    defaultValues: {
-      _phoneNumber: '',
-      _code: '',
-    },
-  });
-  const session = useSession();
-
-  const onPhoneNumberSubmit = async ({_phoneNumber: phoneNumber, _code}: Input) => {
-    const confirmation = await session.signInWithPhoneNumber(phoneNumber);
-    if (confirmation) {
-      setConfirm(confirmation);
-    } else {
-      // Handle the case where confirmation is null (sign in failed)
-      setError('_phoneNumber', {
-        type: 'manual',
-        message: 'Failed to send OTP. Please try again.',
-      });
-    }
-  };
-
-  const onOtpSubmit = async ({_phoneNumber, _code: code}: Input) => {
-    try {
-      await confirm?.confirm(code);
-      // router.push("/auth/permissions");
-      router.replace("/app/");
-    } catch (error) {
-      setError('_code', {
-        type: 'manual',
-        message: 'Invalid code. Please try again.',
-      });
-    }
-  };
+  const router = useRouter();
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
-    >
-      {!confirm ? (
-        <View style={{ width: "80%" }}>
-          <Text>Enter your phone number</Text>
-          <Controller
-            control={control}
-            rules={{ required: 'Phone number is required' }}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                placeholder="Phone Number"
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-                style={{ marginBottom: 10, borderWidth: 1, borderColor: '#cccccc', padding: 10 }}
-              />
-            )}
-            name="_phoneNumber"
-          />
-          {errors._phoneNumber && <Text>{errors._phoneNumber.message}</Text>}
-          <Button title="Send OTP" onPress={handleSubmit(onPhoneNumberSubmit)} />
+    // <ImageBackground
+    //   source={{
+    //     uri: "https://cdn.discordapp.com/attachments/1002773521975480371/1219337465354256544/Untitled_design_4.png?ex=660aef81&is=65f87a81&hm=3e095fed8bbd168c9a9911aa8be15c2674e3a83a98d45a9fcc8ad2771c8dcd90&",
+    //   }}
+    //   style={styles.backgroundImage}
+    // >
+      <View style={styles.container}>
+        <Text style={styles.title}>Title</Text>
+        <Text style={styles.subheading}>SubHeading</Text>
+
+        {/* <Image
+          source={{
+            uri: "https://media.discordapp.net/attachments/1002773521975480371/1219327063664889886/00ce5ea46391853a9659121561a7d5aa-flat-eye-icon.png?ex=660ae5d1&is=65f870d1&hm=80139ac1b2f8cfb0f0f7d7607f112240b09c35fec72c43b4a9821402c253e979&=&format=webp&quality=lossless&width=619&height=619",
+          }}
+          style={styles.eyeImage}
+        /> */}
+
+        <View style={styles.statisticsContainer}>
+          {/* <Text style={styles.statisticsText}>615,165 Blind</Text>
+          <Text style={styles.statisticsText}>7,287,399 Volunteers</Text> */}
         </View>
-      ) : (
-        <View style={{ width: "80%" }}>
-          <Text>Enter the OTP</Text>
-          <Controller
-            control={control}
-            rules={{ required: 'OTP is required' }}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                placeholder="OTP"
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-                keyboardType="numeric"
-                style={{ marginBottom: 10, borderWidth: 1, borderColor: '#cccccc', padding: 10 }}
-              />
-            )}
-            name="_code"
-          />
-          {errors._code && <Text>{errors._code.message}</Text>}
-          <Button title="Verify OTP" onPress={handleSubmit(onOtpSubmit)} />
-        </View>
-      )}
-    </KeyboardAvoidingView>
+
+        <TouchableOpacity style={[styles.button, styles.firstButton]} onPress={() => router.push("/auth/phoneNumber")}>
+          <Text style={styles.buttonText}>Get Started</Text>
+          {/* <Text style={styles.buttonSubtitle}>Enter your phone number to get started</Text> */}
+        </TouchableOpacity>
+ 
+      </View>
+    // </ImageBackground>
   );
 };
 
-export default Index;
+const styles = StyleSheet.create({
+  backgroundImage: {
+    flex: 1,
+    width: "100%", // Ensure it covers the whole screen width
+    height: "100%", // Ensure it covers the whole screen height
+  },
+
+  container: {
+    flex: 1,
+    backgroundColor: "#010100", // Dark blue background
+    alignItems: "center",
+    justifyContent: "space-around", // Space the items out evenly
+    paddingVertical: 20, // Add vertical padding
+  },
+  headerText: {
+    color: "white",
+    fontSize: 24, // You can adjust the size as needed
+    fontWeight: "bold",
+  },
+  title: {
+    color: "white",
+    fontSize: 35, // Keep the size for the title
+    fontWeight: "bold",
+    textAlign: "center",
+    marginBottom: -10, // Reduce the space below the title
+  },
+  subheading: {
+    color: "white",
+    fontSize: 24, // Smaller size for the subheading
+    fontWeight: "bold",
+    textAlign: "center",
+    marginTop: -10, // Reduce the space above the subheading
+  },
+  eyeImage: {
+    width: screenWidth, // Adjust as needed
+    height: 200, // Adjust as needed
+    resizeMode: "contain", // Keep the aspect ratio
+  },
+  statisticsContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+    paddingHorizontal: 40, // Add horizontal padding
+  },
+  statisticsText: {
+    color: "white",
+    fontSize: 18, // Adjust as needed
+  },
+  button: {
+    backgroundColor: "#0962F6", // Bright blue background for buttons
+    padding: 15, // Add padding
+    borderRadius: 10, // Round the corners
+    width: "80%", // Set the width
+    marginBottom: 10, // Add bottom margin to the first button
+    alignItems: "center", // Center text horizontally
+  },
+  firstButton: {
+    marginTop: 10, // Add top margin to the first button
+  },
+  buttonText: {
+    color: "white",
+    fontSize: 20, // Adjust as needed
+    fontWeight: "bold",
+  },
+  buttonSubtitle: {
+    color: "white",
+    fontSize: 16, // Adjust as needed
+  },
+});
+
+export default BeMyEyesScreen;

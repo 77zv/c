@@ -64,7 +64,7 @@ export const PermissionsProvider = ({ children }: PermissionsProviderProps) => {
   };
 
   useEffect(() => {
-    const subscription = AppState.addEventListener("change", (nextAppState) => {
+    const subscription = AppState.addEventListener("change", nextAppState => {
       if (nextAppState === "active") {
         void checkPermissions();
       }
