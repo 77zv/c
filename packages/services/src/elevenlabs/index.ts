@@ -6,5 +6,5 @@ export const wsUrl = [
   env.ELEVEN_LABS_VOICE_ID,
   "/stream-input?model_id=",
   env.ELEVEN_LABS_MODEL,
-  "&optimize_streaming_latency=0",
+  "&optimize_streaming_latency=3",
 ].join("");
