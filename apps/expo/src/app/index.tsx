@@ -17,9 +17,9 @@ const Index = () => {
     }
   }, [sessionIsLoading, permissionsIsLoading, isSignedIn]);
 
-  // if (sessionIsLoading || permissionsIsLoading) {
-  //   return <LoadingIndicatorOverlay />;
-  // }
+  if (sessionIsLoading || permissionsIsLoading) {
+    return <LoadingIndicatorOverlay />;
+  }
 
   return isSignedIn ? <Redirect href="/app/" /> : <Redirect href="/auth/" />;
 };
