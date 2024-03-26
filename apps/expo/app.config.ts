@@ -78,6 +78,13 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       },
     ],
     [
+      "expo-av",
+      {
+        microphonePermission:
+          "Allow $(PRODUCT_NAME) to access your microphone.",
+      },
+    ],
+    [
       "@react-native-voice/voice",
       {
         microphonePermission:

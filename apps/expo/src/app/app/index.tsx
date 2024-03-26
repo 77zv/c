@@ -8,9 +8,30 @@ import type {
 } from "@react-native-voice/voice";
 import React, { useCallback, useEffect, useState } from "react";
 import { StyleSheet, Text, TouchableHighlight, View } from "react-native";
+import { Audio } from "expo-av";
 import Voice from "@react-native-voice/voice";
+import { z } from "zod";
 
 import { api } from "~/api";
+
+const AlignmentSchema = z.object({
+  char_start_times_ms: z.array(z.number()).optional(),
+  chars_durations_ms: z.array(z.number()).optional(),
+  chars: z.array(z.string()).optional(),
+});
+
+const AudioDataSchema = z.object({
+  audio: z.string().optional().nullable(),
+  isFinal: z.boolean().optional().nullable(),
+  normalizedAlignment: AlignmentSchema.optional().nullable(),
+  alignment: AlignmentSchema.optional().nullable(),
+});
+
+type Alignment = z.infer<typeof AlignmentSchema>;
+type AudioData = z.infer<typeof AudioDataSchema>;
+
+export { AudioDataSchema, AlignmentSchema };
+export type { Alignment, AudioData };
 
 const randomUUID = () => {
   return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
@@ -46,7 +67,10 @@ const Home = () => {
     partialResults: [],
   });
 
-  const [webSocket, setWebSocket] = useState<WebSocket | null>(null);
+  const [audioQueue, setAudioQueue] = useState<(string | null | undefined)[]>(
+    [],
+  );
+  const [isPlaying, setIsPlaying] = useState(false);
 
   useEffect(() => {
     // Initialize WebSocket connection
@@ -56,22 +80,55 @@ const Home = () => {
     };
     ws.onmessage = (e: MessageEvent<string>) => {
       // Handle incoming messages
-      console.log(e.data);
+      const parsedData = AudioDataSchema.parse(JSON.parse(e.data));
+      if (parsedData.audio) {
+        setAudioQueue((currentQueue) => [...currentQueue, parsedData.audio]);
+      }
     };
     ws.onerror = (e) => {
-      // Handle errors
       console.error(e);
     };
     ws.onclose = () => {
       console.log("WebSocket Connection closed!");
     };
 
-    setWebSocket(ws);
-
     return () => {
       ws.close();
     };
   }, []);
+
+  useEffect(() => {
+    // Function to play audio from the queue
+    const playAudio = async () => {
+      if (isPlaying || audioQueue.length === 0) return;
+      setIsPlaying(true);
+      const currentAudio = audioQueue.shift();
+      const soundObject = new Audio.Sound();
+      try {
+        await soundObject.loadAsync({
+          uri: `data:audio/mp3;base64,${currentAudio}`,
+        });
+        await soundObject.playAsync();
+        soundObject.setOnPlaybackStatusUpdate((playbackStatus) => {
+          if (playbackStatus.isLoaded && playbackStatus.didJustFinish) {
+            setIsPlaying(false);
+            void soundObject.unloadAsync();
+          }
+        });
+      } catch (error) {
+        console.error(error);
+        setIsPlaying(false);
+      }
+    };
+
+    // Call playAudio if there's something in the queue and nothing is currently playing
+    void playAudio();
+
+    // Interval to continuously check the queue and play audio
+    const intervalId = setInterval(() => playAudio, 250); // Check every second
+
+    return () => clearInterval(intervalId);
+  }, [audioQueue, isPlaying]);
 
   useEffect(() => {
     const onSpeechStart = (e: SpeechStartEvent) => {
@@ -99,15 +156,10 @@ const Home = () => {
 
     const onSpeechResults = (e: SpeechResultsEvent) => {
       console.log("onSpeechResults: ", e);
-      setState((prevState) => ({ ...prevState, results: e.value ?? [] }));
-    };
-
-    const onSpeechPartialResults = (e: SpeechResultsEvent) => {
-      console.log("onSpeechPartialResults: ", e);
       setState((prevState) => ({
         ...prevState,
         end: true,
-        partialResults: e.value ?? [],
+        results: e.value ?? [],
       }));
 
       if (e.value === undefined) return;
@@ -118,6 +170,14 @@ const Home = () => {
       if (bestMatch === undefined) return;
 
       void processSpeechToLLM(bestMatch); // Process the final speech result
+    };
+
+    const onSpeechPartialResults = (e: SpeechResultsEvent) => {
+      console.log("onSpeechPartialResults: ", e);
+      setState((prevState) => ({
+        ...prevState,
+        partialResults: e.value ?? [],
+      }));
     };
 
     const onSpeechVolumeChanged = (e: SpeechVolumeChangeEvent) => {

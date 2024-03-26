@@ -11,13 +11,13 @@ export class ListenToPromptResponseUseCase
     websocketClients.set(clientId, connection);
 
     connection.socket.onmessage = (event: MessageEvent<string>) => {
-      server.log.info(`WS message from server => ${clientId}: ${event.data}`);
+      // server.log.info(`WS message from server => ${clientId}: ${event.data}`);
 
       const parsedData = AudioDataSchema.parse(JSON.parse(event.data));
 
-      if (parsedData.isFinal) {
-        connection.socket.close();
-      }
+      // if (parsedData.isFinal) {
+      //   connection.socket.close();
+      // }
     };
   }
 }

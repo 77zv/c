@@ -7,8 +7,8 @@ const AlignmentSchema = z.object({
 });
 
 const AudioDataSchema = z.object({
-  audio: z.string().nullable(),
-  isFinal: z.boolean().nullable(),
+  audio: z.string().optional().nullable(),
+  isFinal: z.boolean().optional().nullable(),
   normalizedAlignment: AlignmentSchema.optional().nullable(),
   alignment: AlignmentSchema.optional().nullable(),
 });
