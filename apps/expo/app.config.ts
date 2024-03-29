@@ -44,6 +44,18 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     "@react-native-firebase/app",
     "@react-native-firebase/auth",
     [
+      "expo-build-properties",
+      {
+        android: {
+          compileSdkVersion: 34,
+          targetSdkVersion: 34,
+        },
+        ios: {
+          deploymentTarget: "13.4",
+        },
+      },
+    ],
+    [
       "expo-camera",
       {
         cameraPermission: "Allow $(PRODUCT_NAME) to access your camera.",
@@ -93,5 +105,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
           "CUSTOM: Allow $(PRODUCT_NAME) to securely recognize user speech",
       },
     ],
+    "./custom-native-modules/expo-audio-streaming/app.plugin",
   ],
 });

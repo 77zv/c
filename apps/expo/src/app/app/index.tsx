@@ -73,11 +73,12 @@ const Home = () => {
   const [isPlaying, setIsPlaying] = useState(false);
 
   useEffect(() => {
-    // Initialize WebSocket connection
     const ws = new WebSocket(WEBSOCKET_URL);
+
     ws.onopen = () => {
       console.log("WebSocket Connection opened!");
     };
+
     ws.onmessage = (e: MessageEvent<string>) => {
       // Handle incoming messages
       const parsedData = AudioDataSchema.parse(JSON.parse(e.data));
@@ -85,9 +86,11 @@ const Home = () => {
         setAudioQueue((currentQueue) => [...currentQueue, parsedData.audio]);
       }
     };
+
     ws.onerror = (e) => {
       console.error(e);
     };
+
     ws.onclose = () => {
       console.log("WebSocket Connection closed!");
     };
@@ -101,14 +104,19 @@ const Home = () => {
     // Function to play audio from the queue
     const playAudio = async () => {
       if (isPlaying || audioQueue.length === 0) return;
+
       setIsPlaying(true);
+
       const currentAudio = audioQueue.shift();
       const soundObject = new Audio.Sound();
+
       try {
         await soundObject.loadAsync({
           uri: `data:audio/mp3;base64,${currentAudio}`,
         });
+
         await soundObject.playAsync();
+
         soundObject.setOnPlaybackStatusUpdate((playbackStatus) => {
           if (playbackStatus.isLoaded && playbackStatus.didJustFinish) {
             setIsPlaying(false);
@@ -125,7 +133,7 @@ const Home = () => {
     void playAudio();
 
     // Interval to continuously check the queue and play audio
-    const intervalId = setInterval(() => playAudio, 250); // Check every second
+    const intervalId = setInterval(() => playAudio, 100); // Check every second
 
     return () => clearInterval(intervalId);
   }, [audioQueue, isPlaying]);
