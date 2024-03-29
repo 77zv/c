@@ -19,7 +19,8 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   },
   assetBundlePatterns: ["**/*"],
   ios: {
-    bundleIdentifier: "your.bundle.identifier",
+    googleServicesFile: "./GoogleService-Info.plist",
+    bundleIdentifier: "tech.seegull.see",
     supportsTablet: true,
   },
   android: {
@@ -51,6 +52,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
           targetSdkVersion: 34,
         },
         ios: {
+          useFrameworks: "static",
           deploymentTarget: "13.4",
         },
       },
