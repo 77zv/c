@@ -1,0 +1,6 @@
+[submodule "apps/expo/custom-native-modules/expo-audio-streaming"]
+	path = apps/expo/custom-native-modules/expo-audio-streaming
+	url = git@github.com:ALGKMP/expo-audio-streaming.git
+[submodule "apps/expo/custom-native-modules/expo-music-picker"]
+	path = apps/expo/custom-native-modules/expo-music-picker
+	url = https://github.com/barthap/expo-music-picker.git
