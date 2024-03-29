@@ -28,7 +28,7 @@
 
 import { useEffect } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import * as ExpoAudioStreaming from "custom-native-modules/expo-audio-streaming/src/index";
+import * as ExpoAudioStreaming from "modules/expo-audio-streaming/src/index";
 
 import { BASE_64 } from "./base64";
 
