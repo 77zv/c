@@ -35,9 +35,6 @@ importers:
       '@http-wizard/react-query':
         specifier: ^1.3.20
         version: 1.3.20(@http-wizard/core@1.3.20)(@tanstack/react-query@5.22.2)
-      '@react-native-community/checkbox':
-        specifier: ^0.5.17
-        version: 0.5.17(react-native@0.73.6)(react@18.2.0)
       '@react-native-firebase/app':
         specifier: ^19.0.1
         version: 19.0.1(expo@50.0.14)(react-native@0.73.6)(react@18.2.0)
@@ -68,6 +65,9 @@ importers:
       expo:
         specifier: ~50.0.14
         version: 50.0.14(@babel/core@7.23.9)(@react-native/babel-preset@0.73.21)
+      expo-audio-streamer:
+        specifier: ^0.1.0
+        version: 0.1.0(expo@50.0.14)(react-native@0.73.6)(react@18.2.0)
       expo-av:
         specifier: ^13.10.5
         version: 13.10.5(expo@50.0.14)
@@ -3284,20 +3284,6 @@ packages:
       '@babel/runtime': 7.23.9
       '@radix-ui/react-compose-refs': 1.0.0(react@18.2.0)
       react: 18.2.0
-    dev: false
-
-  /@react-native-community/checkbox@0.5.17(react-native@0.73.6)(react@18.2.0):
-    resolution: {integrity: sha512-ZZx/eOH3SIxBg+hvA2zRd7lX5zPQEWcZU8C8Dn7WLdpJkiTkPmIUDFHWrmzxCnwZcyoD+BIt6gUZPKGGb9WmeQ==}
-    peerDependencies:
-      react: '*'
-      react-native: '>= 0.62'
-      react-native-windows: '>=0.62'
-    peerDependenciesMeta:
-      react-native-windows:
-        optional: true
-    dependencies:
-      react: 18.2.0
-      react-native: 0.73.6(@babel/core@7.23.9)(@babel/preset-env@7.23.9)(react@18.2.0)
     dev: false
 
   /@react-native-community/cli-clean@12.3.6:
@@ -6590,6 +6576,18 @@ packages:
     transitivePeerDependencies:
       - expo
       - supports-color
+    dev: false
+
+  /expo-audio-streamer@0.1.0(expo@50.0.14)(react-native@0.73.6)(react@18.2.0):
+    resolution: {integrity: sha512-1sYD46piiWPk9If0zwWpjAFmh21RDCXk8kKJFJsUNgdypfSWDIFnoe0vOWDxqQtaqc9V3aUBdyLXnDpjsGemoQ==}
+    peerDependencies:
+      expo: '*'
+      react: '*'
+      react-native: '*'
+    dependencies:
+      expo: 50.0.14(@babel/core@7.23.9)(@react-native/babel-preset@0.73.21)
+      react: 18.2.0
+      react-native: 0.73.6(@babel/core@7.23.9)(@babel/preset-env@7.23.9)(react@18.2.0)
     dev: false
 
   /expo-av@13.10.5(expo@50.0.14):

@@ -107,6 +107,5 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
           "CUSTOM: Allow $(PRODUCT_NAME) to securely recognize user speech",
       },
     ],
-    "./modules/expo-audio-streaming/app.plugin",
   ],
 });

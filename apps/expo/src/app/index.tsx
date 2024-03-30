@@ -26,26 +26,26 @@
 
 // export default Index;
 
-import { useEffect } from "react";
-import { StyleSheet, Text, View } from "react-native";
-import * as ExpoAudioStreaming from "modules/expo-audio-streaming/src/index";
+import { useeffect } from "react";
+import { stylesheet, text, view } from "react-native";
 
-import { BASE_64 } from "./base64";
+import * as expoaudiostreaming from "expo-audio-streamer"
+import { base_64 } from "./base64";
 
-export default function App() {
-  useEffect(() => {
+export default function app() {
+  useeffect(() => {
     const setup = async () => {
       try {
-        await ExpoAudioStreaming.init();
-        console.log("Audio streaming initialized");
-        await new Promise((resolve) => setTimeout(resolve, 500));
+        await expoaudiostreaming.init();
+        console.log("audio streaming initialized");
+        await new promise((resolve) => settimeout(resolve, 500));
 
-        await ExpoAudioStreaming.appendAudio(BASE_64);
-        console.log("Audio appended");
-        await new Promise((resolve) => setTimeout(resolve, 500));
+        await expoaudiostreaming.appendaudio(base_64);
+        console.log("audio appended");
+        await new promise((resolve) => settimeout(resolve, 500));
 
-        await ExpoAudioStreaming.appendAudio(BASE_64);
-        console.log("Audio appended 2");
+        await expoaudiostreaming.appendaudio(base_64);
+        console.log("audio appended 2");
       } catch (error) {
         console.error(error);
       }
@@ -55,18 +55,18 @@ export default function App() {
   }, []);
 
   return (
-    <View style={styles.container}>
-      <Text>Hello World!</Text>
-    </View>
+    <view style={styles.container}>
+      <text>hello world!</text>
+    </view>
   );
 }
 
-const styles = StyleSheet.create({
+const styles = stylesheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundcolor: "#fff",
+    alignitems: "center",
+    justifycontent: "center",
   },
 });
 

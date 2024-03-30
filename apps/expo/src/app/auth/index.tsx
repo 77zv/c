@@ -43,7 +43,7 @@
 //           <Text style={styles.buttonText}>Get Started</Text>
 //           {/* <Text style={styles.buttonSubtitle}>Enter your phone number to get started</Text> */}
 //         </TouchableOpacity>
- 
+
 //       </View>
 //     // </ImageBackground>
 //   );
@@ -123,7 +123,7 @@
 
 import { useEffect } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import * as ExpoAudioStreaming from "modules/expo-audio-streaming/src/index";
+import * as ExpoAudioStreaming from "expo-audio-streamer";
 
 import { BASE_64 } from "../base64";
 
@@ -131,7 +131,6 @@ export default function App() {
   useEffect(() => {
     const setup = async () => {
       try {
-        await new Promise((resolve) => setTimeout(resolve, 1000));
         await ExpoAudioStreaming.init();
         console.log("Audio streaming initialized");
         await new Promise((resolve) => setTimeout(resolve, 500));
@@ -152,7 +151,7 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <Text>Hello World!</Text>
+      <Text>Hello world!</Text>
     </View>
   );
 }
@@ -165,4 +164,3 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 });
-
