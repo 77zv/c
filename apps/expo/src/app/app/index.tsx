@@ -8,6 +8,7 @@ import type {
 } from "@react-native-voice/voice";
 import React, { useCallback, useEffect, useState } from "react";
 import { StyleSheet, Text, TouchableHighlight, View } from "react-native";
+import * as AudioStreamer from "expo-audio-streamer";
 import { Audio } from "expo-av";
 import Voice from "@react-native-voice/voice";
 import { z } from "zod";
@@ -42,7 +43,7 @@ const randomUUID = () => {
 };
 
 const CLIENT_ID = randomUUID();
-const WEBSOCKET_URL = `ws://172.26.96.1:3000/listen-to-prompt-response/${CLIENT_ID}`;
+const WEBSOCKET_URL = `ws://172.31.144.1:3000/listen-to-prompt-response/${CLIENT_ID}`;
 
 interface State {
   recognized: boolean;
@@ -74,6 +75,7 @@ const Home = () => {
 
   useEffect(() => {
     const ws = new WebSocket(WEBSOCKET_URL);
+    void AudioStreamer.init();
 
     ws.onopen = () => {
       console.log("WebSocket Connection opened!");
@@ -82,7 +84,9 @@ const Home = () => {
     ws.onmessage = (e: MessageEvent<string>) => {
       // Handle incoming messages
       const parsedData = AudioDataSchema.parse(JSON.parse(e.data));
+      console.log("Parsed Data: ", parsedData);
       if (parsedData.audio) {
+        void AudioStreamer.appendAudio(parsedData.audio);
         setAudioQueue((currentQueue) => [...currentQueue, parsedData.audio]);
       }
     };
@@ -100,43 +104,43 @@ const Home = () => {
     };
   }, []);
 
-  useEffect(() => {
-    // Function to play audio from the queue
-    const playAudio = async () => {
-      if (isPlaying || audioQueue.length === 0) return;
+  // useEffect(() => {
+  //   // Function to play audio from the queue
+  //   const playAudio = async () => {
+  //     if (isPlaying || audioQueue.length === 0) return;
 
-      setIsPlaying(true);
+  //     setIsPlaying(true);
 
-      const currentAudio = audioQueue.shift();
-      const soundObject = new Audio.Sound();
+  //     const currentAudio = audioQueue.shift();
+  //     const soundObject = new Audio.Sound();
 
-      try {
-        await soundObject.loadAsync({
-          uri: `data:audio/mp3;base64,${currentAudio}`,
-        });
+  //     try {
+  //       await soundObject.loadAsync({
+  //         uri: `data:audio/mp3;base64,${currentAudio}`,
+  //       });
 
-        await soundObject.playAsync();
+  //       await soundObject.playAsync();
 
-        soundObject.setOnPlaybackStatusUpdate((playbackStatus) => {
-          if (playbackStatus.isLoaded && playbackStatus.didJustFinish) {
-            setIsPlaying(false);
-            void soundObject.unloadAsync();
-          }
-        });
-      } catch (error) {
-        console.error(error);
-        setIsPlaying(false);
-      }
-    };
+  //       soundObject.setOnPlaybackStatusUpdate((playbackStatus) => {
+  //         if (playbackStatus.isLoaded && playbackStatus.didJustFinish) {
+  //           setIsPlaying(false);
+  //           void soundObject.unloadAsync();
+  //         }
+  //       });
+  //     } catch (error) {
+  //       console.error(error);
+  //       setIsPlaying(false);
+  //     }
+  //   };
 
-    // Call playAudio if there's something in the queue and nothing is currently playing
-    void playAudio();
+  //   // Call playAudio if there's something in the queue and nothing is currently playing
+  //   void playAudio();
 
-    // Interval to continuously check the queue and play audio
-    const intervalId = setInterval(() => playAudio, 100); // Check every second
+  //   // Interval to continuously check the queue and play audio
+  //   const intervalId = setInterval(() => playAudio, 100); // Check every second
 
-    return () => clearInterval(intervalId);
-  }, [audioQueue, isPlaying]);
+  //   return () => clearInterval(intervalId);
+  // }, [audioQueue, isPlaying]);
 
   useEffect(() => {
     const onSpeechStart = (e: SpeechStartEvent) => {
