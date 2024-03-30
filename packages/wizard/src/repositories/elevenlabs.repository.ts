@@ -27,7 +27,7 @@ export class ElevenLabsRepository {
         for await (const text of textIterator) {
           server.log.info(`Sending text to ElevenLabs: ${text}`);
           websocket.send(
-            JSON.stringify({ text, try_trigger_generation: true }),
+            JSON.stringify({ text }),
           );
         }
 
@@ -38,10 +38,10 @@ export class ElevenLabsRepository {
     });
 
     websocket.on("message", (data) => {
-      console.log(
-        "Received data from ElevenLabs: ",
-        JSON.parse(data.toString()),
-      );
+      // console.log(
+      //   "Received data from ElevenLabs: ",
+      //   JSON.parse(data.toString()),
+      // );
 
       const parsedData = AudioDataSchema.parse(
         // eslint-disable-next-line @typescript-eslint/no-base-to-string

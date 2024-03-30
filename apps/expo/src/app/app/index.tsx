@@ -9,7 +9,7 @@ import type {
 import React, { useCallback, useEffect, useState } from "react";
 import { StyleSheet, Text, TouchableHighlight, View } from "react-native";
 import * as AudioStreamer from "expo-audio-streamer";
-import { Audio } from "expo-av";
+import * as Crypto from "expo-crypto";
 import Voice from "@react-native-voice/voice";
 import { z } from "zod";
 
@@ -28,22 +28,6 @@ const AudioDataSchema = z.object({
   normalizedAlignment: AlignmentSchema.optional().nullable(),
   alignment: AlignmentSchema.optional().nullable(),
 });
-
-type Alignment = z.infer<typeof AlignmentSchema>;
-type AudioData = z.infer<typeof AudioDataSchema>;
-
-export { AudioDataSchema, AlignmentSchema };
-export type { Alignment, AudioData };
-
-const randomUUID = () => {
-  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
-    const r = (Math.random() * 16) | 0;
-    const v = c === "x" ? r : (r & 0x3) | 0x8;
-    return v.toString(16);
-  });
-};
-
-// const WEBSOCKET_BASE_URL = "ws://172.31.144.1:3000/listen-to-prompt-response/";
 
 interface State {
   recognized: boolean;
@@ -67,42 +51,6 @@ const Home = () => {
     results: [],
     partialResults: [],
   });
-
-  // const [audioQueue, setAudioQueue] = useState<(string | null | undefined)[]>(
-  //   [],
-  // );
-  // const [isPlaying, setIsPlaying] = useState(false);
-
-  // useEffect(() => {
-  //   const ws = new WebSocket(WEBSOCKET_URL);
-  //   void AudioStreamer.init();
-
-  //   ws.onopen = () => {
-  //     console.log("WebSocket Connection opened!");
-  //   };
-
-  //   ws.onmessage = (e: MessageEvent<string>) => {
-  //     // Handle incoming messages
-  //     const parsedData = AudioDataSchema.parse(JSON.parse(e.data));
-  //     console.log("Parsed Data: ", parsedData);
-  //     if (parsedData.audio) {
-  //       void AudioStreamer.appendAudio(parsedData.audio);
-  //       setAudioQueue((currentQueue) => [...currentQueue, parsedData.audio]);
-  //     }
-  //   };
-
-  //   ws.onerror = (e) => {
-  //     console.error(e);
-  //   };
-
-  //   ws.onclose = () => {
-  //     console.log("WebSocket Connection closed!");
-  //   };
-
-  //   return () => {
-  //     ws.close();
-  //   };
-  // }, []);
 
   useEffect(() => {
     const onSpeechStart = (e: SpeechStartEvent) => {
@@ -143,7 +91,7 @@ const Home = () => {
 
       if (bestMatch === undefined) return;
 
-      void processSpeechToLLM(bestMatch); // Process the final speech result
+      void startPromptSession(bestMatch); // Process the final speech result
     };
 
     const onSpeechPartialResults = (e: SpeechResultsEvent) => {
@@ -181,9 +129,9 @@ const Home = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const processSpeechToLLM = useCallback(
+  const startPromptSession = useCallback(
     async (text: string) => {
-      const clientId = randomUUID();
+      const clientId = Crypto.randomUUID();
 
       void AudioStreamer.init();
 
