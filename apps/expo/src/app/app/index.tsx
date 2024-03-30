@@ -14,6 +14,7 @@ import Voice from "@react-native-voice/voice";
 import { z } from "zod";
 
 import { api } from "~/api";
+import { getWsBaseUrl } from "~/utils/ip";
 
 const AlignmentSchema = z.object({
   char_start_times_ms: z.array(z.number()).optional(),
@@ -42,10 +43,7 @@ const randomUUID = () => {
   });
 };
 
-// const CLIENT_ID = randomUUID();
-// const WEBSOCKET_URL = `ws://172.31.144.1:3000/listen-to-prompt-response/${CLIENT_ID}`;
-
-const WEBSOCKET_BASE_URL = "ws://172.31.144.1:3000/listen-to-prompt-response/";
+// const WEBSOCKET_BASE_URL = "ws://172.31.144.1:3000/listen-to-prompt-response/";
 
 interface State {
   recognized: boolean;
@@ -189,7 +187,8 @@ const Home = () => {
 
       void AudioStreamer.init();
 
-      const ws = new WebSocket(`${WEBSOCKET_BASE_URL}${clientId}`);
+      const wsUrl = `${getWsBaseUrl()}/listen-to-prompt-response/${clientId}`;
+      const ws = new WebSocket(wsUrl);
 
       const cleanupWebSocket = () => {
         if (ws.readyState === WebSocket.OPEN) {
