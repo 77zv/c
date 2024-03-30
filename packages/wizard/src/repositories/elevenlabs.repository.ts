@@ -43,11 +43,6 @@ export class ElevenLabsRepository {
         JSON.parse(data.toString()),
       );
 
-      // if contains error, throw error
-      if (JSON.parse(data.toString()).error) {
-        throw new Error(JSON.parse(data.toString()).message);
-      }
-
       const parsedData = AudioDataSchema.parse(
         // eslint-disable-next-line @typescript-eslint/no-base-to-string
         JSON.parse(data.toString()),

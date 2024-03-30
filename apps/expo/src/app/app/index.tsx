@@ -42,8 +42,10 @@ const randomUUID = () => {
   });
 };
 
-const CLIENT_ID = randomUUID();
-const WEBSOCKET_URL = `ws://172.31.144.1:3000/listen-to-prompt-response/${CLIENT_ID}`;
+// const CLIENT_ID = randomUUID();
+// const WEBSOCKET_URL = `ws://172.31.144.1:3000/listen-to-prompt-response/${CLIENT_ID}`;
+
+const WEBSOCKET_BASE_URL = "ws://172.31.144.1:3000/listen-to-prompt-response/";
 
 interface State {
   recognized: boolean;
@@ -68,79 +70,41 @@ const Home = () => {
     partialResults: [],
   });
 
-  const [audioQueue, setAudioQueue] = useState<(string | null | undefined)[]>(
-    [],
-  );
-  const [isPlaying, setIsPlaying] = useState(false);
-
-  useEffect(() => {
-    const ws = new WebSocket(WEBSOCKET_URL);
-    void AudioStreamer.init();
-
-    ws.onopen = () => {
-      console.log("WebSocket Connection opened!");
-    };
-
-    ws.onmessage = (e: MessageEvent<string>) => {
-      // Handle incoming messages
-      const parsedData = AudioDataSchema.parse(JSON.parse(e.data));
-      console.log("Parsed Data: ", parsedData);
-      if (parsedData.audio) {
-        void AudioStreamer.appendAudio(parsedData.audio);
-        setAudioQueue((currentQueue) => [...currentQueue, parsedData.audio]);
-      }
-    };
-
-    ws.onerror = (e) => {
-      console.error(e);
-    };
-
-    ws.onclose = () => {
-      console.log("WebSocket Connection closed!");
-    };
-
-    return () => {
-      ws.close();
-    };
-  }, []);
+  // const [audioQueue, setAudioQueue] = useState<(string | null | undefined)[]>(
+  //   [],
+  // );
+  // const [isPlaying, setIsPlaying] = useState(false);
 
   // useEffect(() => {
-  //   // Function to play audio from the queue
-  //   const playAudio = async () => {
-  //     if (isPlaying || audioQueue.length === 0) return;
+  //   const ws = new WebSocket(WEBSOCKET_URL);
+  //   void AudioStreamer.init();
 
-  //     setIsPlaying(true);
+  //   ws.onopen = () => {
+  //     console.log("WebSocket Connection opened!");
+  //   };
 
-  //     const currentAudio = audioQueue.shift();
-  //     const soundObject = new Audio.Sound();
-
-  //     try {
-  //       await soundObject.loadAsync({
-  //         uri: `data:audio/mp3;base64,${currentAudio}`,
-  //       });
-
-  //       await soundObject.playAsync();
-
-  //       soundObject.setOnPlaybackStatusUpdate((playbackStatus) => {
-  //         if (playbackStatus.isLoaded && playbackStatus.didJustFinish) {
-  //           setIsPlaying(false);
-  //           void soundObject.unloadAsync();
-  //         }
-  //       });
-  //     } catch (error) {
-  //       console.error(error);
-  //       setIsPlaying(false);
+  //   ws.onmessage = (e: MessageEvent<string>) => {
+  //     // Handle incoming messages
+  //     const parsedData = AudioDataSchema.parse(JSON.parse(e.data));
+  //     console.log("Parsed Data: ", parsedData);
+  //     if (parsedData.audio) {
+  //       void AudioStreamer.appendAudio(parsedData.audio);
+  //       setAudioQueue((currentQueue) => [...currentQueue, parsedData.audio]);
   //     }
   //   };
 
-  //   // Call playAudio if there's something in the queue and nothing is currently playing
-  //   void playAudio();
+  //   ws.onerror = (e) => {
+  //     console.error(e);
+  //   };
 
-  //   // Interval to continuously check the queue and play audio
-  //   const intervalId = setInterval(() => playAudio, 100); // Check every second
+  //   ws.onclose = () => {
+  //     console.log("WebSocket Connection closed!");
+  //   };
 
-  //   return () => clearInterval(intervalId);
-  // }, [audioQueue, isPlaying]);
+  //   return () => {
+  //     ws.close();
+  //   };
+  // }, []);
 
   useEffect(() => {
     const onSpeechStart = (e: SpeechStartEvent) => {
@@ -221,9 +185,42 @@ const Home = () => {
 
   const processSpeechToLLM = useCallback(
     async (text: string) => {
-      await promptModel.query({
-        body: { clientId: CLIENT_ID, promptData: { text } },
-      });
+      const clientId = randomUUID();
+
+      void AudioStreamer.init();
+
+      const ws = new WebSocket(`${WEBSOCKET_BASE_URL}${clientId}`);
+
+      const cleanupWebSocket = () => {
+        if (ws.readyState === WebSocket.OPEN) {
+          ws.close();
+        }
+      };
+
+      ws.onopen = async () => {
+        console.log("WebSocket Connection opened!");
+
+        await promptModel.query({
+          body: { clientId, promptData: { text } },
+        });
+      };
+
+      ws.onmessage = (e: MessageEvent<string>) => {
+        const parsedData = AudioDataSchema.parse(JSON.parse(e.data));
+        if (parsedData.audio) {
+          void AudioStreamer.appendAudio(parsedData.audio);
+        }
+      };
+
+      ws.onerror = (e) => {
+        console.error(e);
+        cleanupWebSocket();
+      };
+
+      ws.onclose = () => {
+        console.log("WebSocket Connection closed!");
+        cleanupWebSocket();
+      };
     },
     [promptModel],
   );

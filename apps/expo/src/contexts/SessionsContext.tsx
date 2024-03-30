@@ -52,7 +52,7 @@ const SessionProvider = ({ children }: SessionProviderProps) => {
 
   useEffect(() => {
     const unsubscribe = auth().onAuthStateChanged((authUser) => {
-      console.log("Auth state changed:", authUser);
+      // console.log("Auth state changed:", authUser);
       setUser(authUser);
       setIsLoading(false);
       
