@@ -3,8 +3,6 @@ import { StatusBar } from "expo-status-bar";
 
 // import { TRPCProvider } from "~/utils/api"; // todo: setup query client
 
-import "../styles.css";
-
 import { PermissionsProvider } from "~/contexts/PermissionsContext";
 import SessionProvider from "~/contexts/SessionsContext";
 
