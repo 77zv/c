@@ -15,9 +15,9 @@ export class ListenToPromptResponseUseCase
 
       const parsedData = AudioDataSchema.parse(JSON.parse(event.data));
 
-      // if (parsedData.isFinal) {
-      //   connection.socket.close();
-      // }
+      if (parsedData.isFinal) {
+        connection.socket.close();
+      }
     };
   }
 }

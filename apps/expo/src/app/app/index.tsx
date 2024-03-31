@@ -130,7 +130,7 @@ const Home = () => {
   }, []);
 
   const startPromptSession = useCallback(
-    async (text: string) => {
+    (text: string) => {
       const clientId = Crypto.randomUUID();
 
       void AudioStreamer.init();
