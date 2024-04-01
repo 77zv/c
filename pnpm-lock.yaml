@@ -66,8 +66,8 @@ importers:
         specifier: ~50.0.14
         version: 50.0.14(@babel/core@7.23.9)(@react-native/babel-preset@0.73.21)
       expo-audio-streamer:
-        specifier: ^0.1.2
-        version: 0.1.2(expo@50.0.14)(react-native@0.73.6)(react@18.2.0)
+        specifier: ^0.1.3
+        version: 0.1.3(expo@50.0.14)(react-native@0.73.6)(react@18.2.0)
       expo-av:
         specifier: ^13.10.5
         version: 13.10.5(expo@50.0.14)
@@ -6578,8 +6578,8 @@ packages:
       - supports-color
     dev: false
 
-  /expo-audio-streamer@0.1.2(expo@50.0.14)(react-native@0.73.6)(react@18.2.0):
-    resolution: {integrity: sha512-dcup+lBQXZ0YGVUGJubYbH0sz2wZsbSmRFMugUlIZ2GH/I9JR/cgfjmZXu/NV+h99y1k2L+2lJ9MJTCWMCDayg==}
+  /expo-audio-streamer@0.1.3(expo@50.0.14)(react-native@0.73.6)(react@18.2.0):
+    resolution: {integrity: sha512-86rU4t0dEbCKP+YgYJh4ChXV9E0BC5ZDS6/yfpXtmjTrnOX0WqxRGvNdk+Ha0G4/m+Z0TescMfTnnbkixeAZQw==}
     peerDependencies:
       expo: '*'
       react: '*'

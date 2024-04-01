@@ -152,10 +152,10 @@ const Home = () => {
         });
       };
 
-      ws.onmessage = (e: MessageEvent<string>) => {
+      ws.onmessage = async (e: MessageEvent<string>) => {
         const parsedData = AudioDataSchema.parse(JSON.parse(e.data));
         if (parsedData.audio) {
-          void AudioStreamer.appendAudio(parsedData.audio);
+          await AudioStreamer.appendAudio(parsedData.audio);
         }
       };
 
